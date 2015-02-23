@@ -1,0 +1,145 @@
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+#include "symbol.h"
+
+outerNode *head;
+
+void insert_outerNode()
+{
+
+	outerNode* Node = (outerNode*)malloc(sizeof(outerNode));
+	// Checks for malloc
+	Node->prev = head;
+	Node->next = NULL;
+	Node->innerNodehead = NULL;
+	
+	if (head == NULL)
+	{
+		head = Node;
+		
+	}
+	else
+	{
+		head->next = Node;
+		head = Node;
+	}
+}
+
+void free_inner_nodes(innerNode *node) {
+    if (node == NULL) {
+        return;
+    }
+
+    free_inner_nodes(node->next);
+    free(node->name);
+    free(node);
+}
+
+void remove_outerNode()
+{
+	outerNode* temp;
+
+	if (head == NULL)
+	{
+		return;
+	}
+
+	temp = head->prev;
+	
+	free_inner_nodes(head->innerNodehead);
+	free(head);
+
+	head = temp;
+
+	if (head == NULL)
+	{
+		return;
+	}
+
+	head->next = NULL;	
+
+}
+
+void insert_innerNode(char* name, int type, int size, int isConst, int id)
+{
+	innerNode* iNode = (innerNode*)malloc(sizeof(innerNode));
+	char* symbolName = (char*) malloc(sizeof(char)*(strlen(name)+1));
+
+	iNode->name = strcpy(symbolName, name);
+	iNode->type = type;
+	iNode->size = size;
+	iNode->isConst = isConst;
+	iNode->id = id;
+
+	innerNode* NodePtr;
+
+	if (head->innerNodehead == NULL)
+	{
+		head->innerNodehead = iNode;
+		iNode->next = NULL;
+	}
+	else
+	{
+		NodePtr = head->innerNodehead;
+		while (NodePtr->next != NULL)
+		{
+			NodePtr = NodePtr->next;
+
+		} 
+		NodePtr->next = iNode;
+		iNode->next = NULL;
+	}
+}
+
+innerNode* lookup_innerNode(char* name)
+{
+	outerNode* oNodePtr;
+	innerNode* iNodePtr;
+
+	oNodePtr = head;
+
+	while(oNodePtr != NULL)
+	{
+		iNodePtr = oNodePtr->innerNodehead;
+		while(iNodePtr != NULL)
+		{
+			if (!strcmp(name, iNodePtr->name))
+			{
+				
+				return iNodePtr;
+			}
+			iNodePtr = iNodePtr->next;
+		}
+		oNodePtr = oNodePtr->prev;
+	}
+	
+	return NULL;
+}
+
+
+innerNode* lookup_onelevel_innerNode(char* name)
+{
+	outerNode* oNodePtr;
+	innerNode* iNodePtr;
+
+	oNodePtr = head;
+
+
+	iNodePtr = oNodePtr->innerNodehead;
+	while(iNodePtr != NULL)
+	{
+		if (!strcmp(name, iNodePtr->name))
+		{
+				
+			return iNodePtr;
+		}
+		iNodePtr = iNodePtr->next;
+	}
+	oNodePtr = oNodePtr->prev;
+
+	
+	return NULL;
+}
+

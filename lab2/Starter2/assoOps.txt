@@ -1,0 +1,7 @@
+/* Assignment Operators do not associate, therefore this test should fail */
+
+{
+
+int a = b = 3;
+
+}

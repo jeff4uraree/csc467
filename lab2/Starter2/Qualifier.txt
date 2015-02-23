@@ -1,0 +1,6 @@
+/* Parsing an invalid qualifier */
+
+{
+      const int num = 1 + 1;
+
+}

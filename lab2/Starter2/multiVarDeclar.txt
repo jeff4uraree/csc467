@@ -1,0 +1,6 @@
+/* Since we are not allowed to declare 2 variables in 1 declaration, this test should produce an error */
+
+{
+      int num1, num2;
+
+}

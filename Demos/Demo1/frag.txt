@@ -1,0 +1,38 @@
+!!ARBfp1.0
+
+TEMP $1_temp;
+
+# Start if, depth: 1
+TEMP tempVarCond1;
+MOV tempVarCond1, 1.000000;
+SUB tempVarCond1, tempVarCond1, 0.500000;
+# Start then, depth: 1
+TEMP tempVar1;
+MOV tempVar1, fragment.color.x;
+TEMP tempVar2;
+MOV tempVar2, fragment.position.x;
+MUL tempVar1, tempVar1, tempVar2;
+CMP $1_temp.x, tempVarCond1, $1_temp.x, tempVar1.x;
+MOV tempVar1, fragment.color.y;
+MOV tempVar2, fragment.position.y;
+MUL tempVar1, tempVar1, tempVar2;
+CMP $1_temp.y, tempVarCond1, $1_temp.y, tempVar1.x;
+MOV tempVar1, fragment.color.z;
+CMP $1_temp.z, tempVarCond1, $1_temp.z, tempVar1.x;
+MOV tempVar1, fragment.color.w;
+MOV tempVar2, fragment.position.x;
+MUL tempVar1, tempVar1, tempVar2;
+MOV tempVar2, fragment.position.y;
+MUL tempVar1, tempVar1, tempVar2;
+CMP $1_temp.w, tempVarCond1, $1_temp.w, tempVar1.x;
+# End then, depth: 1
+CMP tempVarCond1, tempVarCond1, 0.500000, -0.500000;
+# Start else, depth: 1
+MOV tempVar1, fragment.color;
+CMP $1_temp, tempVarCond1, $1_temp, tempVar1;
+# End if, depth: 1
+
+MOV tempVar1, $1_temp;
+MOV result.color, tempVar1;
+
+END

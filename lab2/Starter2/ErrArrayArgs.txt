@@ -1,0 +1,7 @@
+/* These are examples of erronous array declarations in MiniGL */
+
+{
+
+vec2 floatVec = vec2(1,5);
+
+}
